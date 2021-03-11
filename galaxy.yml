@@ -3,10 +3,10 @@
 # The namespace of the collection. This can be a company/brand/organization or product namespace under which all
 # content lives. May only contain alphanumeric lowercase characters and underscores. Namespaces cannot start with
 # underscores or numbers and cannot contain consecutive underscores
-namespace: mkanoor
+namespace: ansible
 
 # The name of the collection. Has the same character restrictions as 'namespace'
-name: service_catalog_connector_installer
+name: automation_services_catalog_client
 
 # The version of the collection. Must be compatible with semantic versioning
 version: 1.0.0
@@ -45,13 +45,13 @@ tags: []
 dependencies: {}
 
 # The URL of the originating SCM repository
-repository: https://github.com/mkanoor/service_catalog_connector_installer
+repository: https://github.com/ansible/automation_services_catalog_client
 
 # The URL to any online docs
-documentation: https://github.com/mkanoor/service_catalog_connector_installer/issues
+documentation: https://github.com/ansible/automation_services_catalog_client/issues
 
 # The URL to the homepage of the collection/project
-homepage: https://github.com/mkanoor/service_catalog_connector_installer
+homepage: https://github.com/ansible/automation_services_catalog_client
 
 # The URL to the collection issue tracker
-issues: https://github.com/mkanoor/service_catalog_connector_installer/issues
+issues: https://github.com/ansible/automation_services_catalog_client/issues
