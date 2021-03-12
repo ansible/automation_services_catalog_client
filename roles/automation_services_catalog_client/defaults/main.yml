@@ -1,0 +1,13 @@
+---
+tower_uuid: "{{ lookup('password', '/dev/null chars=ascii_letters,digits') | to_uuid }}"
+tower_name: "{{ tower_url | urlsplit('hostname') }}"
+tower_validate_certs: true
+connector_packages:
+  - rhc
+  - rhc-catalog-worker
+system_cert_file: "/etc/pki/consumer/cert.pem"
+system_key_file: "/etc/pki/consumer/key.pem"
+rhc_config_dir: "/etc/rhc"
+catalog_config_dir: "{{ rhc_config_dir }}/workers"
+log_level: "error"
+mqtt_broker: "wss://connect.cloud.redhat.com:443"

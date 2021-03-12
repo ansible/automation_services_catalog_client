@@ -1,0 +1,17 @@
+---
+- name: Check if the system is registered with RHSM
+  stat:
+    path: "{{ system_cert_file }}"
+  register: cert_details
+
+- name: Fail if the certificate is missing
+  ansible.builtin.fail:
+    msg: "{{ system_cert_file }} missing, please register the system with RHSM"
+  when: not cert_details.stat.exists
+
+- name: Verify that the required parameters are provided
+  assert:
+    that:
+      - tower_url | default('') | length
+      - tower_token | default('') | length
+    fail_msg: Ensure both tower_url and tower_token are defined and have proper values

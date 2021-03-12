@@ -1,3 +1,4 @@
+---
 ### REQUIRED
 
 # The namespace of the collection. This can be a company/brand/organization or product namespace under which all
@@ -17,7 +18,7 @@ readme: README.md
 # A list of the collection's content authors. Can be just the name or in the format 'Full Name <email> (url)
 # @nicks:irc/im.site#channel'
 authors:
-- your name mkanoor@redhat.com
+  - Madhu Kanoor <mkanoor@redhat.com>
 
 
 ### OPTIONAL but strongly recommended
@@ -25,14 +26,9 @@ authors:
 # A short summary description of the collection
 description: This collection installs the connector which can be used to link the Ansible Tower to cloud.redhat.com
 
-# Either a single license or a list of licenses for content inside of a collection. Ansible Galaxy currently only
-# accepts L(SPDX,https://spdx.org/licenses/) licenses. This key is mutually exclusive with 'license_file'
-license:
-- GPL-2.0-or-later
-
 # The path to the license file for the collection. This path is relative to the root of the collection. This key is
 # mutually exclusive with 'license'
-license_file: ''
+license_file: LICENSE
 
 # A list of tags you want to associate with the collection for indexing/searching. A tag name has the same character
 # requirements as 'namespace' and 'name'
