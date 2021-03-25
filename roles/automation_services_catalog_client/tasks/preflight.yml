@@ -12,6 +12,6 @@
 - name: Verify that the required parameters are provided
   assert:
     that:
-      - tower_url | default('') | length
-      - tower_token | default('') | length
-    fail_msg: Ensure both tower_url and tower_token are defined and have proper values
+      - service_catalog_controller_user | default('') | length
+      - service_catalog_controller_password | default('') | length
+    fail_msg: Ensure both service_catalog_controller_user and service_catalog_controller_password are defined and have proper values

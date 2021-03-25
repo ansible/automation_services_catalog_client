@@ -1,0 +1,116 @@
+---
+- name: Set the application and token name
+  set_fact:
+    service_catalog_controller_app_name: "Service Catalog - {{ service_catalog_controller_user }}"
+
+- name: Retrieve install uuid
+  uri:
+    url: https://{{ _service_catalog_controller_url }}/api/v2/ping
+    user: '{{ service_catalog_controller_user }}'
+    password: '{{ service_catalog_controller_password }}'
+    force_basic_auth: true
+    validate_certs: false
+  register: _install_info
+  no_log: true
+
+- name: Retrieve User Info
+  uri:
+    url: https://{{ _service_catalog_controller_url }}/api/v2/me
+    user: '{{ service_catalog_controller_user }}'
+    password: '{{ service_catalog_controller_password }}'
+    force_basic_auth: true
+    validate_certs: false
+  register: _user_info
+  no_log: true
+
+- name: Retrieve User Organization Info
+  uri:
+    url: https://{{ _service_catalog_controller_url }}/api/v2/users/{{ _user_info.json.results[0].id }}/organizations
+    user: '{{ service_catalog_controller_user }}'
+    password: '{{ service_catalog_controller_password }}'
+    force_basic_auth: true
+    validate_certs: false
+  register: _org_info
+  no_log: true
+
+- name: Store the install and organisation uuid value
+  set_fact:
+    _service_catalog_controller_uuid: '{{ _install_info.json.install_uuid + _org_info.json.results[0].id | to_uuid }}'
+
+- name: Retrieve application
+  uri:
+    url: https://{{ _service_catalog_controller_url }}/api/v2/applications/
+    user: '{{ service_catalog_controller_user }}'
+    password: '{{ service_catalog_controller_password }}'
+    force_basic_auth: true
+    follow_redirects: true
+    validate_certs: false
+  register: _applications
+  no_log: true
+
+- name: Generate application (if not created)
+  uri:
+    url: https://{{ _service_catalog_controller_url }}/api/v2/applications/
+    user: '{{ service_catalog_controller_user }}'
+    password: '{{ service_catalog_controller_password }}'
+    method: POST
+    force_basic_auth: true
+    follow_redirects: true
+    body_format: json
+    body:
+      name: '{{ service_catalog_controller_app_name }}'
+      description: '{{ service_catalog_controller_app_name }}'
+      client_type: confidential
+      authorization_grant_type: password
+      organization: '{{ _org_info.json.results[0].id | int }}'
+    validate_certs: false
+    status_code: 201
+  register: _application_info
+  no_log: true
+  when:
+    - not _applications.json.results | selectattr("name", "equalto", service_catalog_controller_app_name) | list | length
+
+- name: Retrieve token
+  uri:
+    url: https://{{ _service_catalog_controller_url }}/api/v2/users/{{ _user_info.json.results[0].id }}/tokens/
+    user: '{{ service_catalog_controller_user }}'
+    password: '{{ service_catalog_controller_password }}'
+    force_basic_auth: true
+    follow_redirects: true
+    validate_certs: false
+  register: _tokens
+  no_log: true
+
+- name: Generate token (if not created)
+  uri:
+    url: https://{{ _service_catalog_controller_url }}/api/v2/users/{{ _user_info.json.results[0].id }}/tokens/
+    user: '{{ service_catalog_controller_user }}'
+    password: '{{ service_catalog_controller_password }}'
+    method: POST
+    force_basic_auth: true
+    follow_redirects: true
+    body_format: json
+    body:
+      description: Service Catalog - {{ service_catalog_controller_user }}
+      scope: write
+      application: '{{ _application_info.json.id }}'
+    validate_certs: false
+    status_code: 201
+  register: _token_info
+  no_log: true
+  when:
+    - not _tokens.json.results | selectattr("description", "equalto", service_catalog_controller_app_name) | list | length
+
+- name: Store the token value
+  set_fact:
+    _service_catalog_controller_token: '{{ _token_info.json.token }}'
+  no_log: true
+  when:
+    - not _tokens.json.results | selectattr("description", "equalto", service_catalog_controller_app_name) | list | length
+
+- name: Store the token value
+  set_fact:
+    _service_catalog_controller_token: '************'
+  no_log: true
+  when:
+    - _tokens.json.results | selectattr("description", "equalto", service_catalog_controller_app_name) | list | length

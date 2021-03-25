@@ -1,10 +1,17 @@
 ---
+- name: Set the service_catalog_controller url value from inventory
+  set_fact:
+    _service_catalog_controller_url: "{{ service_catalog_controller_url | default(hostvars[groups['tower'][0]]['ansible_host']) | default(hostvars[groups['tower'][0]]['inventory_hostname']) }}"
+
 - name: Run preflight checks
   include_tasks: preflight.yml
 
+- name: Generate token for catalog worker auth
+  include_tasks: generate_token.yml
+
 - name: Install catalog worker
   become: true
-  yum:
+  dnf:
     name: "{{ connector_packages }}"
 
 - name: Ensure config directory exists
@@ -20,6 +27,9 @@
     dest: "{{ catalog_config_dir }}/catalog.toml"
     mode: 0640
     src: catalog.toml.j2
+  notify: restart-rhcd
+  when:
+    - _service_catalog_controller_token != '************'
 
 - name: Optionally write RHCD config file
   become: true
@@ -27,6 +37,7 @@
     dest: "{{ rhc_config_dir }}/config.toml"
     mode: 0640
     src: config.toml.j2
+  notify: restart-rhcd
 
 - name: Start the rhcd systemd service
   become: true

@@ -1,9 +1,9 @@
 [ANSIBLE_TOWER]
-token="{{ tower_token }}"
-url="{{ tower_url }}"
+token="{{ _service_catalog_controller_token }}"
+url="https://{{ _service_catalog_controller_url }}"
 verify_ssl="{{ tower_validate_certs | bool }}"
-name="{{ tower_name }}"
-uuid="{{ tower_uuid }}"
+name="{{ service_catalog_controller_name }}"
+uuid="{{ _service_catalog_controller_uuid }}"
 
 [AUTH]
 client_cert="{{ system_cert_file }}"
