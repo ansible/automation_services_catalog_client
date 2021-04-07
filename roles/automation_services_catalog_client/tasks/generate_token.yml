@@ -9,7 +9,7 @@
     user: '{{ service_catalog_controller_user }}'
     password: '{{ service_catalog_controller_password }}'
     force_basic_auth: true
-    validate_certs: false
+    validate_certs: '{{ service_catalog_controller_validate_certs | bool }}'
   register: _install_info
   no_log: true
 
@@ -19,7 +19,7 @@
     user: '{{ service_catalog_controller_user }}'
     password: '{{ service_catalog_controller_password }}'
     force_basic_auth: true
-    validate_certs: false
+    validate_certs: '{{ service_catalog_controller_validate_certs | bool }}'
   register: _user_info
   no_log: true
 
@@ -29,7 +29,7 @@
     user: '{{ service_catalog_controller_user }}'
     password: '{{ service_catalog_controller_password }}'
     force_basic_auth: true
-    validate_certs: false
+    validate_certs: '{{ service_catalog_controller_validate_certs | bool }}'
   register: _org_info
   no_log: true
 
@@ -44,7 +44,7 @@
     password: '{{ service_catalog_controller_password }}'
     force_basic_auth: true
     follow_redirects: true
-    validate_certs: false
+    validate_certs: '{{ service_catalog_controller_validate_certs | bool }}'
   register: _applications
   no_log: true
 
@@ -63,7 +63,7 @@
       client_type: confidential
       authorization_grant_type: password
       organization: '{{ _org_info.json.results[0].id | int }}'
-    validate_certs: false
+    validate_certs: '{{ service_catalog_controller_validate_certs | bool }}'
     status_code: 201
   register: _application_info
   no_log: true
@@ -77,7 +77,7 @@
     password: '{{ service_catalog_controller_password }}'
     force_basic_auth: true
     follow_redirects: true
-    validate_certs: false
+    validate_certs: '{{ service_catalog_controller_validate_certs | bool }}'
   register: _tokens
   no_log: true
 
@@ -94,7 +94,7 @@
       description: Service Catalog - {{ service_catalog_controller_user }}
       scope: write
       application: '{{ _application_info.json.id }}'
-    validate_certs: false
+    validate_certs: '{{ service_catalog_controller_validate_certs | bool }}'
     status_code: 201
   register: _token_info
   no_log: true

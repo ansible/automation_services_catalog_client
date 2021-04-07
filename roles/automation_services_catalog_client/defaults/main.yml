@@ -1,6 +1,6 @@
 ---
 service_catalog_controller_name: "{{ service_catalog_controller_url | default(hostvars[groups['tower'][0]]['ansible_host']) | default(hostvars[groups['tower'][0]]['inventory_hostname']) }}"
-tower_validate_certs: true
+service_catalog_controller_validate_certs: true
 connector_packages:
   - rhc
   - rhc-catalog-worker
