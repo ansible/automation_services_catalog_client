@@ -1,7 +1,7 @@
 [ANSIBLE_TOWER]
 token="{{ _service_catalog_controller_token }}"
 url="https://{{ _service_catalog_controller_url }}"
-verify_ssl="{{ tower_validate_certs | bool }}"
+verify_ssl="{{ service_catalog_controller_validate_certs | bool }}"
 name="{{ service_catalog_controller_name }}"
 uuid="{{ _service_catalog_controller_uuid }}"
 
