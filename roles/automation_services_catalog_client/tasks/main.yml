@@ -14,6 +14,20 @@
   dnf:
     name: "{{ connector_packages }}"
 
+- name: Ensure service config directory exists
+  become: true
+  file:
+    path: "{{ rhc_service_config_dir }}"
+    recurse: true
+    state: directory
+
+- name: Write rhc service proxy configuration file
+  become: true
+  template:
+    dest: "{{ rhc_service_config_dir }}/proxy.conf"
+    mode: 0640
+    src: proxy.conf.j2
+
 - name: Ensure config directory exists
   become: true
   file:
