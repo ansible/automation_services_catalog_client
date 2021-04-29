@@ -9,6 +9,12 @@
     msg: "{{ system_cert_file }} missing, please register the system with RHSM"
   when: not cert_details.stat.exists
 
+- name: Verify that the service_catalog_controler_url is specified or that the inventory is proper
+  assert:
+    that:
+      - service_catalog_controller_url | default('') | length or groups['tower'] | length
+    fail_msg: Ensure that either service_catalog_controller_url is specified or there is a host in the tower group
+
 - name: Verify that the required parameters are provided
   assert:
     that:

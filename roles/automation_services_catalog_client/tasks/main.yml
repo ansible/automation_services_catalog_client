@@ -1,10 +1,16 @@
 ---
-- name: Set the service_catalog_controller url value from inventory
-  set_fact:
-    _service_catalog_controller_url: "{{ service_catalog_controller_url | default(hostvars[groups['tower'][0]]['ansible_host']) | default(hostvars[groups['tower'][0]]['inventory_hostname']) }}"
-
 - name: Run preflight checks
   include_tasks: preflight.yml
+
+- name: Set the service_catalog_controller url value from variable if specified
+  set_fact:
+    _service_catalog_controller_url: "{{ service_catalog_controller_url }}"
+  when: service_catalog_controller_url | default('') | length
+
+- name: Set the service_catalog_controller url value from inventory
+  set_fact:
+    _service_catalog_controller_url: "{{ hostvars[groups['tower'][0]]['ansible_host'] | default(hostvars[groups['tower'][0]]['inventory_hostname']) }}"
+  when: not service_catalog_controller_url | default('') | length
 
 - name: Generate token for catalog worker auth
   include_tasks: generate_token.yml
