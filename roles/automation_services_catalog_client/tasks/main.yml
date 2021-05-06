@@ -14,6 +14,12 @@
   dnf:
     name: "{{ connector_packages }}"
 
+- name: Remove unwanted packages
+  become: true
+  dnf:
+    name: "{{ unwanted_worker_packages }}"
+    state: absent
+
 - name: Ensure service config directory exists
   become: true
   file:
