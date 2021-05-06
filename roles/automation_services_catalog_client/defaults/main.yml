@@ -4,6 +4,8 @@ service_catalog_controller_validate_certs: true
 connector_packages:
   - rhc
   - rhc-catalog-worker
+unwanted_worker_packages:
+  - rhc-worker-playbook
 system_cert_file: "/etc/pki/consumer/cert.pem"
 system_key_file: "/etc/pki/consumer/key.pem"
 rhc_config_dir: "/etc/rhc"
