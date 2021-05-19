@@ -1,5 +1,5 @@
 ---
-service_catalog_controller_name: "{{ service_catalog_controller_url | default(hostvars[groups['tower'][0]]['ansible_host']) | default(hostvars[groups['tower'][0]]['inventory_hostname']) }}"
+service_catalog_controller_name: "{{ service_catalog_controller_url | default(hostvars[groups['automationcontroller'][0]]['ansible_host']) | default(hostvars[groups['automationcontroller'][0]]['inventory_hostname']) }}"
 service_catalog_controller_validate_certs: true
 connector_packages:
   - rhc
